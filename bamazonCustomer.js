@@ -71,12 +71,12 @@ function displayChoices () {
     .prompt([
       {
         name: "productID",
-        type: "input",
+        type: "number",
         message: "Please enter the ID of the product you'd like to buy",
       }, 
       {
         name: "quantity",
-        type: "integer",
+        type: "number",
         message: "Please enter quantity",
       }
     ])
@@ -98,7 +98,7 @@ function toShopOrNotToShop(productID, quantity) {
   
     //first we check whether we have enough stock
     if (res[0].stock_quantity < quantity) {
-      console.log(res[0].stock_quantity)
+      //console.log(res[0].stock_quantity)
       console.log("Insufficient quantity!");
       console.log("Please select another item");
 

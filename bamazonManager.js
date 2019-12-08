@@ -53,7 +53,7 @@ function mainUserface (){
                 viewLowInventory();
                 break;  
             case "Add to Inventory":
-                addToInventory();
+                addToInventoryPrompt();
             case "Add New Product":
                 addNewProduct();
                 break;
@@ -72,6 +72,7 @@ function viewProducts() {
     //I will be reusing the code from Bamazon Customer here
     var query = "SELECT * FROM products";
     connection.query(query, function(err, res) {
+        if (err) throw err;
         //console.log(res);
 
         //calling the display function
@@ -86,6 +87,7 @@ function viewLowInventory() {
     //first we create the query
     var query = "SELECT * FROM products WHERE stock_quantity <5";
     connection.query(query, function(err, res) {
+        if (err) throw err;
         //console.log(res);
 
         //calling the display function
@@ -95,29 +97,65 @@ function viewLowInventory() {
       
 }
 
-function addToInventory() {
+function addToInventoryPrompt() {
 
-    //As I see it here we need two inquirer prompts. 
-    //The first one will get the ID
-    //The second one will get the quantity
+    //The first question gets the product ID
+    //The second question gets the quantity
     //I will implement these to two functions separately, so that I can reuse them in the addNewProduct section
 
-    //First we get the ID from the user
+    //First we get the ID and the quantity from the user
     inquirer
-    .prompt({
+    .prompt([
+        {
         name: "productID",
-        type: "integer",
+        type: "number",
         message: "Please enter the product ID you wish to update.",
-      })
+      },
+      {
+          name: "quantity",
+          type: "number",
+          message: "Please enter the quantity you'd like to add"
+      }
+    ])
     .then(function(userInput) {
-    //now calling the 
 
+        //first we create the query, where we search for the product with the specific ID
+        var query = "SELECT * FROM products WHERE ?";
+        connection.query(query, {item_id: userInput.productID}, function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        console.log();
+        console.log();
 
+        //We create a variable to store the updated quantity
+        //now we to calculate the updated quantity which is the old one + the new
+        var updatedQuantity = res[0].stock_quantity + userInput.quantity;
+        console.log("Updated Quantity", updatedQuantity);
+        
+        //now calling the add to Inventory function
+        addToInventory(res[0].item_id, updatedQuantity);
+        });
     });
 }
 
+function addToInventory(id, quantity) {
+    
+    //we create the query to update the quantity
+    var query = "UPDATE products SET stock_quantity=? WHERE ?";
+    connection.query(query, [quantity, {item_id: id}], function (err, res){
+        if (err) throw err;
+        //console.log(res);
+        console.log();
+        console.log("Updated Product quantity!");
+
+    });
+
+    //now let's display the updated products altogether
+    viewProducts();
+}
+
 function addNewProduct() {
-    console.log("Add new product function");
+    //console.log("Add new product function");
 }
 
 function displayProducts(arr) {
