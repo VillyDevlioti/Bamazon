@@ -69,32 +69,30 @@ function mainUserface (){
 //View products function
 function viewProducts() {
 
-    //first we need to read from the database and store the data locally
-    var t = new Table;
-
     //I will be reusing the code from Bamazon Customer here
     var query = "SELECT * FROM products";
     connection.query(query, function(err, res) {
-      for (var i = 0; i < res.length; i++) {
-        t.cell('Product Id', res[i].item_id);
-        t.cell('Description', res[i].product_name);
-        t.cell('Department', res[i].department_name);
-        t.cell('Price, USD', res[i].price);
-        t.cell('Quantity', res[i].stock_quantity);
-        t.newRow();
-      }
-      
-      //then we need to print to the screen.
-      console.log(t.toString());
+        //console.log(res);
 
-      //and return to main userface
-      mainUserface();
-  
-    });  
+        //calling the display function
+        displayProducts(res);
+
+      });
 }
 
 function viewLowInventory() {
     console.log("View low inventory function");
+
+    //first we create the query
+    var query = "SELECT * FROM products WHERE stock_quantity <5";
+    connection.query(query, function(err, res) {
+        //console.log(res);
+
+        //calling the display function
+        displayProducts(res);
+
+      });
+      
 }
 
 function addToInventory() {
@@ -103,4 +101,25 @@ function addToInventory() {
 
 function addNewProduct() {
     console.log("Add new product function");
+}
+
+function displayProducts(arr) {
+    
+    //first we need to read from the database and store the data locally
+    var table = new Table;
+
+    for (var i = 0; i < arr.length; i++) {
+        table.cell('Product Id', arr[i].item_id);
+        table.cell('Description', arr[i].product_name);
+        table.cell('Department', arr[i].department_name);
+        table.cell('Price, USD', arr[i].price);
+        table.cell('Quantity', arr[i].stock_quantity);
+        table.newRow();
+      }
+
+    console.log(table.toString());
+
+    //and return to main userface
+    mainUserface();
+
 }
