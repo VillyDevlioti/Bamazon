@@ -81,6 +81,7 @@ function viewProducts() {
       });
 }
 
+//View low inventory function
 function viewLowInventory() {
     console.log("View low inventory function");
 
@@ -97,6 +98,7 @@ function viewLowInventory() {
       
 }
 
+//Add to Inventory prompt function
 function addToInventoryPrompt() {
 
     //The first question gets the product ID
@@ -107,9 +109,9 @@ function addToInventoryPrompt() {
     inquirer
     .prompt([
         {
-        name: "productID",
-        type: "number",
-        message: "Please enter the product ID you wish to update.",
+            name: "productID",
+            type: "number",
+            message: "Please enter the product ID you wish to update.",
       },
       {
           name: "quantity",
@@ -138,6 +140,7 @@ function addToInventoryPrompt() {
     });
 }
 
+//Add to Inventory function
 function addToInventory(id, quantity) {
     
     //we create the query to update the quantity
@@ -154,8 +157,47 @@ function addToInventory(id, quantity) {
     viewProducts();
 }
 
+//Add new product function
 function addNewProduct() {
-    //console.log("Add new product function");
+    //First we need an inquirer prompt with all the detail taken by the user
+    inquirer
+    .prompt([
+        {
+            name: "productName",
+            type: "input",
+            message: "Please enter the product name:",
+        }, 
+        {
+            name: "deptName",
+            type: "input",
+            message: "Please enter the Department name:",
+        }, 
+        {
+            name: "price",
+            type: "number",
+            message: "Please enter the price of the product:",
+        }, 
+        {
+            name: "stockQuantity",
+            type: "number",
+            message: "Please enter the stock quantity of the product:",
+        }, 
+
+    ])
+    .then(function(userInput) {
+        //now we need to take all this info and create a query
+        var query = "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?)"
+        
+        connection.query(query, [userInput.productName, userInput.deptName, userInput.price, userInput.stockQuantity], function (err, res){
+            if (err) throw err;
+            //console.log(res);
+            console.log();
+            console.log("You have successfully added a new product!");
+    
+        });
+        viewProducts();
+    });
+
 }
 
 function displayProducts(arr) {
