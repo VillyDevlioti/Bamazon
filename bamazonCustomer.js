@@ -150,14 +150,19 @@ function goShopping(id, newQuantity, quantity) {
 
   connection.query(query, [{stock_quantity: newQuantity}, {item_id: id}], function(err, res) {
     if (err) throw err;
-    console.log(res);
+    //console.log(res);
   
     console.log("Transaction Completed");
     console.log("Thank you for shopping with us!");
     console.log();
     console.log();
     console.log();
-    mainUserface();
+    
+    //I choose to end the connection here
+    connection.end();
+
+    //but if we uncomment we return to the main interface
+    //mainUserface();
   
   });  
 
