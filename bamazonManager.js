@@ -96,7 +96,24 @@ function viewLowInventory() {
 }
 
 function addToInventory() {
-    console.log("Add to Inventory function");
+
+    //As I see it here we need two inquirer prompts. 
+    //The first one will get the ID
+    //The second one will get the quantity
+    //I will implement these to two functions separately, so that I can reuse them in the addNewProduct section
+
+    //First we get the ID from the user
+    inquirer
+    .prompt({
+        name: "productID",
+        type: "integer",
+        message: "Please enter the product ID you wish to update.",
+      })
+    .then(function(userInput) {
+    //now calling the 
+
+
+    });
 }
 
 function addNewProduct() {

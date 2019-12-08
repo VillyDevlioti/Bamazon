@@ -58,47 +58,36 @@ function displayProducts() {
     console.log(t.toString());
 
     //now send the user to the prompts section
-    displayFirstMessage();
+    displayChoices();
   });    
 
 }
 
 //This function asks the user for the product ID
-function displayFirstMessage () {
+function displayChoices () {
   
   //The first message should ask them the ID of the product they would like to buy.
   inquirer
-    .prompt({
+    .prompt([
+      {
         name: "productID",
         type: "input",
         message: "Please enter the ID of the product you'd like to buy",
-      })
+      }, 
+      {
+        name: "quantity",
+        type: "integer",
+        message: "Please enter quantity",
+      }
+    ])
       .then(function(userInput) {
 
-        //now send the user to the second question
-        displaySecondMessage(userInput.productID);
+        //now send the user the shop or not to shop
+        toShopOrNotToShop(userInput.productID, userInput.quantity);
 
       });
 }
 
-//This function asks the user for the quantity
-function displaySecondMessage (productID) {
-  
-  //The second message should ask how many units of the product they would like to buy.
-  console.log("it works 2");
-  inquirer
-  .prompt({
-      name: "quantity",
-      type: "integer",
-      message: "Please enter quantity",
-    })
-    .then(function(userInput) {
-
-      //now send the user to the shopping section
-      toShopOrNotToShop(productID, userInput.quantity);
-
-    });
-}
 
 //This functions calculates if shopping is possible based on quantity and proceeds with the transaction
 function toShopOrNotToShop(productID, quantity) {
